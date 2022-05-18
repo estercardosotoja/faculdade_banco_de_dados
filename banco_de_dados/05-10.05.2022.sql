@@ -56,17 +56,18 @@ CREATE OR REPLACE PROCEDURE addregistro
           IF valor_cobertura <= 0 THEN
               SELECT valorfranquiapadrao INTO VLRFRANQUIA FROM TBCOBERTURA WHERE cod_cobertura = pkcodcobert;
               VLRFRANQUIA := VLRFRANQUIA * 8;
-              COD := PROX_COD('tbitenscobertura');
-              INSERT INTO tbitenscobertura(pkitens, fknumapolice, fkcodcobert, valorcobertura)
-              VALUES (COD ,num_apolice, cod_cobertura, valor_cobertura);
-              UPDATE TBAPOLICE SET valortotalapolice = valor_cobertura WHERE fkcodcobert = cod_cobertura;
           END IF;
+              
+          COD := PROX_COD('tbitenscobertura');
+          INSERT INTO tbitenscobertura(pkitens, fknumapolice, fkcodcobert, valorcobertura)
+          VALUES (COD ,num_apolice, cod_cobertura, valor_cobertura);
+          UPDATE TBAPOLICE SET valortotalapolice = valor_cobertura + valortotalapolice WHERE fkcodcobert = cod_cobertura;
             
           SELECT CLI.NOMECLI, COB.NOMECOBERT, APO.VALORTOTALAPOLICE INTO NOME_CLIENTE, NOME_COBERTURA, VLRTOTAPOLICE 
           FROM TBCLIENTE CLI INNER JOIN TBAPOLICE APO ON CLI.PKCODCLI = APO.FKCODCLI,
           INNER JOIN TBITENSCOBERTURA ITENS ON APO.PKNUMAPOLICE = ITENS.FKNUMAPOLICE,
           INNER JOIN TBCOBERTURA COB ON ITENS.FKCODCOBERT = COB.PKCODCOBERT
-          WHERE APO.PKNUMAPOLICE = 456;
+          WHERE APO.PKNUMAPOLICE = num_apolice;
           DBMS_OUTPUT.PUT_LINE('Cliente: '|| NOME_CLIENTE );
           DBMS_OUTPUT.PUT_LINE('Nome cobertura: '|| NOME_COBERTURA );
           DBMS_OUTPUT.PUT_LINE('Valor total apolice : '|| VLRTOTAPOLICE );
