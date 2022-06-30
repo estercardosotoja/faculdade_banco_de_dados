@@ -33,7 +33,7 @@ CREATE OR REPLACE TRIGGER ADD_COMPRODUTO_BI
         :new.pkcomprod := cod;
     END;
 
---  2) Crie uma trigger que após inserir,alterar ou remover um item da composição de produto o campo seja atulizado os seguintes campos da tabela tbproduto
+--  2) Crie uma trigger que após inserir,alterar ou remover um item da composição de produto o campo seja atualizado os seguintes campos da tabela tbproduto
     
      -- “quantitensprod”, deverá ser incrementado ou decrementado em +1 ou -1 item.
      
@@ -42,7 +42,7 @@ CREATE OR REPLACE TRIGGER ADD_COMPRODUTO_BI
      -- “valorvendaprod”, deverá ser recalculado com base no novo valor de custo “custoprod” acrescido da margem de lucro (margemprod).
 
 
--- COM ERROS: 
+--> COM ERROS: 
 
 CREATE OR REPLACE TRIGGER ALTUALIZAR_AIUD
   AFTER UPDATE OR INSERT OR DELETE ON tbcomproduto
@@ -100,10 +100,10 @@ CREATE OR REPLACE TRIGGER ALTUALIZAR_AIUD
         -- Recalcular o “custoprod” e o “valorvendaprod” da tabela de produto
 
 
--- COM ERROS: 
+--> COM ERROS: 
 
-    CREATE OR REPLACE TRIGGER alter_tbmateriaprima_AUD
-    AFTER UPDATE OR DELETE ON tbmateriaprima 
+    CREATE OR REPLACE TRIGGER alter_tbmateriaprima_BUD
+    BEFORE UPDATE OR DELETE ON tbmateriaprima 
     FOR EACH ROW 
     DECLARE
         valorvenda NUMBER;
@@ -157,10 +157,6 @@ CREATE OR REPLACE TRIGGER ALTUALIZAR_AIUD
 
         END IF;
     END;
-
-
-
-
 
 
 -- Massa de Dados
